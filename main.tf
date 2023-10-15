@@ -45,7 +45,9 @@ resource "local_file" "hosts" {
       nginx_hosts   = yandex_compute_instance.nginx.*.hostname
       backend_hosts = yandex_compute_instance.backend.*.hostname
       els_hosts     = yandex_compute_instance.els.*.hostname
-      kibana_host   = yandex_compute_instance.kibana.*.hostname
+      kibana_host   = yandex_compute_instance.kibana.*.hostname,
+      kafka_host    = yandex_compute_instance.kafka.*.hostname
+
   })
   depends_on = [
     yandex_compute_instance.iscsi,
@@ -53,6 +55,7 @@ resource "local_file" "hosts" {
     yandex_compute_instance.nginx,
     yandex_compute_instance.backend,
     yandex_compute_instance.els,
-    yandex_compute_instance.kibana
+    yandex_compute_instance.kibana,
+    yandex_compute_instance.kafka
   ]
 }

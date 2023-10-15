@@ -27,3 +27,8 @@ ${hostname}
 %{ for hostname in kibana_host ~}
 ${hostname}
 %{ endfor ~}
+
+[kafka]
+%{ for hostname in kafka_host ~}
+${hostname}
+%{ endfor ~}
