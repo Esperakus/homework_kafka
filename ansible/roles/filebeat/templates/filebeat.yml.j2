@@ -1,0 +1,36 @@
+filebeat.inputs:
+{% if ansible_host in groups['nginx_hosts'] %}
+- type: log
+  enabled: true
+  paths:
+      - /var/log/nginx/*.log
+  fields:
+    type: nginx_logs
+  fields_under_root: true
+  scan_frequency: 5s
+{% elif ansible_host in groups['backend_hosts'] %}
+- type: journald
+  enabled: true
+  id: go_web
+  fields:
+    type: go_web_journald
+  fields_under_root: true
+  scan_frequency: 5s
+{% endif %}
+
+# output.logstash:
+#   hosts: ["kibana:5044"]
+
+output.kafka:
+    string: '%{[@timestamp]} %{[message]}'
+    hosts: ["kafka0:9092"]
+{% if ansible_host in groups['nginx_hosts'] %}
+    topic: 'nginx'
+{% elif ansible_host in groups['backend_hosts'] %}
+    topic: 'backend'
+{% endif %}
+    partition.round_robin:
+      reachable_only: false
+    required_acks: 1
+    compression: gzip
+    max_message_bytes: 1000000

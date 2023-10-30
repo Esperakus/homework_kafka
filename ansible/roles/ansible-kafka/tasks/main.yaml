@@ -8,6 +8,18 @@
   tags:
     - always
 
+- name: install java deb
+  apt:
+    name: default-jdk
+    update_cache: true
+    install_recommends: false
+  when: ansible_os_family == 'Debian'
+
+- name: install java rpm
+  dnf:
+    name: java-11-openjdk-devel
+  when: ansible_os_family == 'RedHat'
+
 - name: Create kafka group
   group:
     name: '{{ kafka_group }}'
@@ -260,6 +272,18 @@
   tags:
     - kafka_service
 
+- name: Template zookeeper systemd service
+  template:
+    src: zookeeper.service.j2
+    dest: '{{ zookeeper_unit_path }}'
+    group: '{{ kafka_group }}'
+    owner: '{{ kafka_user }}'
+    mode: 0644
+  when: ansible_os_family == "RedHat"
+
+# - name: enable zookeeper service
+  # system
+
 - name: Template kafka systemd service
   template:
     src: kafka.service.j2
@@ -288,3 +312,11 @@
     state: absent
   tags:
     - kafka_cleanup
+
+- name: create topic nginx
+  command: "/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka0:9092 --replication-factor 1 --partitions 2 --topic nginx"
+  become_user: '{{ kafka_user }}'
+
+- name: create topic backend
+  command: "/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka0:9092 --replication-factor 1 --partitions 2 --topic backend"
+  become_user: '{{ kafka_user }}'

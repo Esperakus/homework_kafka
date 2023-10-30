@@ -3,8 +3,11 @@
 - hosts: all
   roles:
     - { role: general-el8, become: true }
-    - { role: filebeat, become: true }
     
+- hosts: kafka
+  roles:
+    - { role: ansible-kafka, become: true }
+
 - hosts: els_hosts
   roles:
     - elasticsearch
@@ -45,6 +48,7 @@
     - { role: iscsi-target, become: true }
     - { role: pcs, become: true }
     - { role: gfs2, become: true }
+    - { role: filebeat, become: true }
 
 - hosts: backend_hosts[0]
   become: true
@@ -93,6 +97,7 @@
 - hosts: nginx_hosts
   roles: 
     - { role: nginx, become: true }
+    - { role: filebeat, become: true }
   
 - hosts: backend_hosts
   roles:
