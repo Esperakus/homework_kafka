@@ -41,7 +41,7 @@ kafka_background_threads: 10
 #     listeners = PLAINTEXT://your.host.name:9092
 #listeners=PLAINTEXT://:9092
 kafka_listeners:
-  - "PLAINTEXT://kafka0:9092"
+  - "PLAINTEXT://:9092"
 
 # Hostname and port the broker will advertise to producers and consumers. If not set,
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
@@ -142,7 +142,7 @@ kafka_log_cleaner_backoff_ms: 15000
 
 ########################### Kafka Connect #############################
 
-kafka_connect_bootstrap_servers: "localhost:9092"
+kafka_connect_bootstrap_servers: "kafka0:9092"
 kafka_connect_group_id: connect-cluster
 kafka_connect_key_converter: org.apache.kafka.connect.json.JsonConverter
 kafka_connect_value_converter: org.apache.kafka.connect.json.JsonConverter
@@ -162,13 +162,13 @@ kafka_connect_offset_storage_file_filename: /tmp/connect.offsets
 
 ############################# Producer #############################
 
-kafka_producer_bootstrap_servers: "localhost:9092"
+kafka_producer_bootstrap_servers: "kafka0:9092"
 kafka_producer_compression_type: none
 
 ############################# Consumer #############################
 
 kafka_consumer_group_id: kafka-consumer-group
-kafka_consumer_bootstrap_servers: "localhost:9092"
+kafka_consumer_bootstrap_servers: "kafka0:9092"
 
 # Example authentication
 ############################# AUTHENTICATION #############################

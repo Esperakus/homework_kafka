@@ -2,13 +2,10 @@
 
 - hosts: all
   roles:
-    - { role: general-el8, become: true }
-    
-- hosts: kafka
-  roles:
-    - { role: ansible-kafka, become: true }
+    - { role: general-el8, become: true, ignore_errors: true }
 
 - hosts: els_hosts
+  ignore_errors: true
   roles:
     - elasticsearch
   vars:
@@ -32,25 +29,30 @@
 
 - hosts: kibana
   roles:
-    - { role: kibana, become: true }
-    - { role: logstash, become: true }
+    - { role: kibana, become: true, ignore_errors: true }
+    - { role: logstash, become: true, ignore_errors: true }
+
+- hosts: kafka
+  roles:
+    - { role: ansible-kafka, become: true }
 
 - hosts: db_hosts
   roles:
-    - { role: postgresql, become: true }
+    - { role: postgresql, become: true, ignore_errors: true }
 
 - hosts: iscsi_hosts
   roles:
-    - { role: iscsi, become: true }
+    - { role: iscsi, become: true, ignore_errors: true }
 
 - hosts: backend_hosts
   roles:
-    - { role: iscsi-target, become: true }
-    - { role: pcs, become: true }
-    - { role: gfs2, become: true }
-    - { role: filebeat, become: true }
+    - { role: iscsi-target, become: true, ignore_errors: true }
+    - { role: pcs, become: true, ignore_errors: true }
+    - { role: gfs2, become: true, ignore_errors: true }
+    - { role: filebeat, become: true, ignore_errors: true }
 
 - hosts: backend_hosts[0]
+  ignore_errors: true
   become: true
   tasks:
     - name: set pv and vg on gfs0
@@ -60,12 +62,14 @@
         vg_options: '--shared'
 
 - hosts: backend_hosts[1:]
+  ignore_errors: true
   become: true
   tasks:
     - name: change vg on other gfs nodes
       command: vgchange --lock-start vg_gfs2
 
 - hosts: backend_hosts[0]
+  ignore_errors: true
   become: true
   tasks:
     - name: create lv on gfs0
@@ -76,6 +80,7 @@
         opts: '--activate sy'
 
 - hosts: backend_hosts[0]
+  ignore_errors: true
   become: true
   tasks:
     - name: mkfs.gfs2
@@ -96,9 +101,9 @@
 
 - hosts: nginx_hosts
   roles: 
-    - { role: nginx, become: true }
-    - { role: filebeat, become: true }
+    - { role: nginx, become: true, ignore_errors: true }
+    - { role: filebeat, become: true, ignore_errors: true }
   
 - hosts: backend_hosts
   roles:
-    - { role: backend, become: true }
+    - { role: backend, become: true, ignore_errors: true }

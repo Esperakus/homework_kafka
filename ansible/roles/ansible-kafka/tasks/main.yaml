@@ -126,6 +126,28 @@
   tags:
     - kafka_dirs
 
+- name: copy libs
+  copy:
+    src: ../files/libs/
+    dest: /opt/kafka/libs/
+    force: no
+
+- name: copy properties nginx to els
+  template:
+    src: nginx-elasticsearch.properties
+    dest: '{{ kafka_dir }}/config/nginx-elasticsearch.properties'
+    mode: 0644
+  tags:
+    - kafka_config
+
+- name: copy properties backend to els
+  template:
+    src: backend-elasticsearch.properties
+    dest: '{{ kafka_dir }}/config/backend-elasticsearch.properties'
+    mode: 0644
+  tags:
+    - kafka_config
+
 - name: Template configuration file to server.properties
   template:
     src: server.properties.j2
@@ -320,3 +342,9 @@
 - name: create topic backend
   command: "/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka0:9092 --replication-factor 1 --partitions 2 --topic backend"
   become_user: '{{ kafka_user }}'
+
+- name: start nginx topic connect
+  command: "/opt/kafka/bin/connect-standalone.sh -daemon /opt/kafka/config/nginx-elasticsearch.properties"
+
+- name: start backend topic connect
+  command: "/opt/kafka/bin/connect-standalone.sh -daemon /opt/kafka/config/backend-elasticsearch.properties"
