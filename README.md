@@ -45,9 +45,14 @@ external_ip_address_kibana = [
 Для проверки результатов работы можно зайти в Kibana, удостовериться, что создались индексы nginx и backend и что они содержат документы. Также в Kibana можно сделать запросы в Elasticsearch, например:
 
 ```
-
+GET /nginx/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
 ```
 
 Примеры того как выглядят собранные логи в кибане:
-![kafka1](https://github.com/Esperakus/homework_kafka/blob/main/pics/pic2.png)
-![kafka2](https://github.com/Esperakus/homework_kafka/blob/main/pics/pic1.png)
+![kafka1](https://github.com/Esperakus/homework_kafka/blob/main/pics/pic1.png)
+![kafka2](https://github.com/Esperakus/homework_kafka/blob/main/pics/pic2.png)
