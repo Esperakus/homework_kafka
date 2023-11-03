@@ -15,7 +15,7 @@ variable "folder_id" {
 
 variable "image_id" {
   type = string
-  default = "fd84itfojin92kj38vmb" # alma 8
+  default = "fd8cqkckt1d3et5smv09" # alma 8
 }
 
 variable "image_deb" {

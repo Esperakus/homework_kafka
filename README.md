@@ -1,13 +1,13 @@
 # Домашняя работа "Централизованный сбор логов в кластер Elasticsearch"
 
-Цель работы - настроить сбор логов веб-проекта в кластер ELK.
+Цель работы - реализация очереди для сборщика логов в Elasticsearch с помощью Kafka.
 
-В качестве веб-проекта взята домашняя работа "Настройка конфигурации веб приложения под высокую нагрузку" (https://github.com/Esperakus/homework_web-hl). К существующим ролям той работы добавлена роль filebeat (назначается на все ВМ в проекте), кластер Elasticsearch из трёх нод, ВМ с logstash и Kibana. Для удобства Kibana имеет доступ из интернета.
+В качестве основы для выполнения данного занятия взята предыдущая работа "Централизованный сбор логов в кластер Elasticsearch" (https://github.com/Esperakus/homework_elastic). К существующим виртуальным машинам той работы добавлена ВМ с Kafka и Kafka Connect.
 
 
 Схема проекта:
 
-![alt text](https://github.com/Esperakus/homework_elastic/blob/main/pics/pic3.png)
+![project](https://github.com/Esperakus/homework_kafka/blob/main/pics/pic3.png)
 
 Для разворачивания проекта необходимо:
 
@@ -42,8 +42,12 @@ external_ip_address_kibana = [
 ...
 ```
 
-Для просмотра логов надо зайти в Кибану по адресам http://{external_ip_address_kibana}:5601/app/observability/overview и http://{external_ip_address_kibana}:5601/app/logs/stream, там можно увидеть статистику сбора логов и сами логи. Также можно настроить фильтры и произвести поиск.
+Для проверки результатов работы можно зайти в Kibana, удостовериться, что создались индексы nginx и backend и что они содержат документы. Также в Kibana можно сделать запросы в Elasticsearch, например:
+
+```
+
+```
 
 Примеры того как выглядят собранные логи в кибане:
-![alt text](https://github.com/Esperakus/homework_elastic/blob/main/pics/pic2.png)
-![alt text](https://github.com/Esperakus/homework_elastic/blob/main/pics/pic1.png)
+![kafka1](https://github.com/Esperakus/homework_kafka/blob/main/pics/pic2.png)
+![kafka2](https://github.com/Esperakus/homework_kafka/blob/main/pics/pic1.png)

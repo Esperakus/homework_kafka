@@ -134,16 +134,8 @@
 
 - name: copy properties nginx to els
   template:
-    src: nginx-elasticsearch.properties
-    dest: '{{ kafka_dir }}/config/nginx-elasticsearch.properties'
-    mode: 0644
-  tags:
-    - kafka_config
-
-- name: copy properties backend to els
-  template:
-    src: backend-elasticsearch.properties
-    dest: '{{ kafka_dir }}/config/backend-elasticsearch.properties'
+    src: connector-elasticsearch.properties
+    dest: '{{ kafka_dir }}/config/connector-elasticsearch.properties'
     mode: 0644
   tags:
     - kafka_config
@@ -336,15 +328,25 @@
     - kafka_cleanup
 
 - name: create topic nginx
-  command: "/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka0:9092 --replication-factor 1 --partitions 2 --topic nginx"
+  command: "/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka0:9092 --replication-factor 1 --partitions 2 --topic nginx --if-not-exists"
   become_user: '{{ kafka_user }}'
 
 - name: create topic backend
-  command: "/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka0:9092 --replication-factor 1 --partitions 2 --topic backend"
+  command: "/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka0:9092 --replication-factor 1 --partitions 2 --topic backend --if-not-exists"
   become_user: '{{ kafka_user }}'
 
-- name: start nginx topic connect
-  command: "/opt/kafka/bin/connect-standalone.sh -daemon /opt/kafka/config/nginx-elasticsearch.properties"
+# - name: start esl connector
+#   command: "/opt/kafka/bin/connect-standalone.sh -daemon /opt/kafka/config/connect-standalone.properties /opt/kafka/config/connector-elasticsearch.properties"
+#   become_user: '{{ kafka_user }}'
 
-- name: start backend topic connect
-  command: "/opt/kafka/bin/connect-standalone.sh -daemon /opt/kafka/config/backend-elasticsearch.properties"
+- name: copy kafka connect service
+  template:
+    src: connector-elasticsearch.service
+    dest: /lib/systemd/system/connector-elasticsearch.service
+
+- name: start kafka connect
+  systemd:
+    name: connector-elasticsearch.service
+    state: started
+    enabled: true
+    daemon_reload: true
