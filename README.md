@@ -2,7 +2,7 @@
 
 Цель работы - реализация очереди для сборщика логов в Elasticsearch с помощью Kafka.
 
-В качестве основы для выполнения данного занятия взята предыдущая работа "Централизованный сбор логов в кластер Elasticsearch" (https://github.com/Esperakus/homework_elastic). К существующим виртуальным машинам той работы добавлена ВМ с Kafka и Kafka Connect.
+В качестве основы для выполнения данного задания взята предыдущая работа "Централизованный сбор логов в кластер Elasticsearch" (https://github.com/Esperakus/homework_elastic). К существующим виртуальным машинам той работы добавлена ВМ с Kafka и Kafka Connect.
 
 
 Схема проекта:
@@ -11,7 +11,7 @@
 
 Для разворачивания проекта необходимо:
 
-1. Заполнить значение переменных cloud_id, folder_id и iam-token в файле **variables.tf**.
+1. Заполнить значения переменных cloud_id, folder_id и iam-token в файле **variables.tf**.
 
 2. Инициализировать рабочую среду Terraform:
 
@@ -20,7 +20,7 @@ $ terraform init
 ```
 В результате будет установлен провайдер для подключения к облаку Яндекс.
 
-3. Запустить разворачивание:
+3. Запустить разворачивание проекта:
 ```
 $ terraform apply
 ```
@@ -29,7 +29,7 @@ $ terraform apply
 ```
 # Пример вывода terraform apply:
 
-Apply complete! Resources: 22 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 23 added, 0 changed, 0 destroyed.
 
 Outputs:
 
@@ -42,7 +42,7 @@ external_ip_address_kibana = [
 ...
 ```
 
-Для проверки результатов работы можно зайти в Kibana, удостовериться, что создались индексы nginx и backend и что они содержат документы. Также в Kibana можно сделать запросы в Elasticsearch, например:
+Для проверки результатов работы можно зайти в Kibana (http://{external_ip_address_kibana}:5601), удостовериться, что создались индексы nginx и backend и что они содержат документы. Также в Kibana можно сделать запросы в Elasticsearch, например:
 
 ```
 GET /nginx/_search
